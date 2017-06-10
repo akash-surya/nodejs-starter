@@ -1,0 +1,28 @@
+<html ng-app="app">
+    <head>
+        <title>Client for a web socket test - Uses angular</title>
+    </head>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.0/angular.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script type="text/javascript">
+        var app = angular.module("app", []);
+        var socket = io.connect();
+        app.controller("ClientController", function($scope) {
+            socket.on("time", function(data) {
+                  $scope.timestamp = data;
+                  $scope.$apply();
+            });
+            
+            $scope.submit = function() {
+                socket.emit("submit", $scope.data);
+            }
+        });
+    </script>
+    <body ng-controller="ClientController">
+        <div>TimeStamp : {{timestamp}}</div>
+        <form ng-submit="submit()">
+            <input type="text" ng-model="data"/>
+            <input type="submit" value="Submit"/>
+        </form>
+    </body>
+</html>
